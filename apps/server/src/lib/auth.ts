@@ -16,14 +16,5 @@ export const auth = betterAuth({
 	},
 	secret: process.env.BETTER_AUTH_SECRET,
 	baseURL: process.env.BETTER_AUTH_URL,
-	// Only add cross-domain cookie config for production
-	...(process.env.NODE_ENV === "production" && {
-		cookies: {
-			sessionToken: {
-				sameSite: "none",
-				secure: true,
-			},
-		},
-	}),
 	plugins: [expo()],
 });
