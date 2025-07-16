@@ -22,7 +22,7 @@ export const queryClient = new QueryClient({
 });
 
 export const link = new RPCLink({
-	url: "/rpc", // Use relative URL via proxy
+	url: `${process.env.NEXT_PUBLIC_SERVER_URL}/rpc`,
 	fetch(url, options) {
 		return fetch(url, {
 			...options,
