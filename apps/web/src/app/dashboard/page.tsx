@@ -1,31 +1,18 @@
-"use client"
-import { authClient } from "@/lib/auth-client";
-import { useQuery } from "@tanstack/react-query";
-import { orpc } from "@/utils/orpc";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { redirect } from "next/navigation";
+import { getSession } from "@/lib/auth";
 
-export default function Dashboard() {
-  const router = useRouter();
-  const { data: session, isPending } = authClient.useSession();
+export default async function Dashboard() {
+	const session = await getSession();
 
-  const privateData = useQuery(orpc.privateData.queryOptions());
+	if (!session) {
+		redirect("/signin");
+	}
 
-  useEffect(() => {
-    if (!session && !isPending) {
-      router.push("/login");
-    }
-  }, [session, isPending]);
-
-  if (isPending) {
-    return <div>Loading...</div>;
-  }
-
-  return (
-    <div>
-      <h1>Dashboard</h1>
-      <p>Welcome {session?.user.name}</p>
-      <p>privateData: {privateData.data?.message}</p>
-    </div>
-  );
+	return (
+		<div>
+			<h1>Dashboard</h1>
+			<p>Welcome {session.user.name}</p>
+			<p>Email: {session.user.email}</p>
+		</div>
+	);
 }
